@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AI Chatbot</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+<div class="app-container">
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <h2>Chatbot</h2>
+        <p>AI Assistant</p>
+    </div>
+
+    <!-- Chat Area -->
+    <div class="chat-area">
+
+        <div id="chatbox" class="chatbox">
+            <div class="bot-msg">
+                Hello 👋 How can I help you today?
+            </div>
+        </div>
+
+        <!-- Input Area -->
+        <div class="input-area">
+            <input type="text" id="userInput" placeholder="Message chatbot..." />
+            <button onclick="sendMessage()">➤</button>
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+function sendMessage(){
+
+    var userText = document.getElementById("userInput").value;
+    if(userText.trim() === "") return;
+
+    // show user message
+    document.getElementById("chatbox").innerHTML +=
+        `<div class="user-msg">${userText}</div>`;
+
+    fetch("/get", {
+        method: "POST",
+        body: new URLSearchParams({msg: userText})
+    })
+    .then(res => res.json())
+    .then(data => {
+
+        document.getElementById("chatbox").innerHTML +=
+            `<div class="bot-msg">${data.response}</div>`;
+
+        document.getElementById("userInput").value = "";
+
+        // auto scroll
+        var chatbox = document.getElementById("chatbox");
+        chatbox.scrollTop = chatbox.scrollHeight;
+    });
+}
+</script>
+
+</body>
+</html>
