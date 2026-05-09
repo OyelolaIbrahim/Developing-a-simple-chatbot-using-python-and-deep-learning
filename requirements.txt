@@ -1,0 +1,7 @@
+tensorflow
+keras
+flask
+nltk
+numpy
+pickle5
+jupyte
